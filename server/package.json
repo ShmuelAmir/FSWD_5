@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "npx json-server@0.17.4 db.json -p 3005"
   },
   "keywords": [],
   "author": "",
