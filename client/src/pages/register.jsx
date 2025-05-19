@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -11,43 +11,44 @@ export default function Register() {
     setError("");
     setSuccess("");
 
-    // Exemple fictif : tu ajoutes une vraie logique d'inscription plus tard
     if (username && password.length >= 4) {
-      setSuccess("Inscription réussie ! Connecte-toi maintenant.");
+      setSuccess("Registration successful! You can now log in.");
       setUsername("");
       setPassword("");
     } else {
-      setError("Choisis un pseudo et un mot de passe d'au moins 4 caractères.");
+      setError(
+        "Please choose a username and password with at least 4 characters."
+      );
     }
   };
 
   return (
     <div>
-      <h2>Inscription</h2>
+      <h2>Registration</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>
-            Nom d'utilisateur :
+            Username:
             <input
               type="text"
               value={username}
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </label>
         </div>
         <div>
           <label>
-            Mot de passe :
+            Password:
             <input
               type="password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </label>
         </div>
-        <button type="submit">S'inscrire</button>
+        <button type="submit">Register</button>
       </form>
       {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
