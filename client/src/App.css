@@ -40,3 +40,71 @@
 .read-the-docs {
   color: #888;
 }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f8fafc;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  margin: 1em auto;
+  padding: 1em 0;
+  background: #dbeafe;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px #0001;
+}
+
+nav a, nav button {
+  color: #2563eb;
+  text-decoration: none;
+  background: none;
+  border: none;
+  margin: 0 0.7em;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 0.4em 0.8em;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+nav a:hover, nav button:hover {
+  background: #bfdbfe;
+}
+
+.user-info-card {
+  margin: 2em auto;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px #0002;
+  padding: 2em;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+  display: block;
+  margin-bottom: 1em;
+  padding: 0.7em;
+  width: 95%;
+  max-width: 320px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+}
+
+button[type="submit"] {
+  background: #2563eb;
+  color: #fff;
+  padding: 0.7em 1.2em;
+  border: none;
+  border-radius: 7px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-bottom: 1em;
+}
+
+button[type="submit"]:hover {
+  background: #1d4ed8;
+}

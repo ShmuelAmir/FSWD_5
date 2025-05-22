@@ -1,7 +1,15 @@
-import { RouterProvider } from "react-router";
-
-import { router } from "./router";
+import { Outlet, Link } from "react-router-dom";
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div>
+      <nav>
+        <Link to="/login">Login</Link> |{" "}
+        <Link to="/register">Register</Link> |{" "}
+        <Link to="/home">Home</Link>
+      </nav>
+      <hr />
+      <Outlet />
+    </div>
+  );
 }

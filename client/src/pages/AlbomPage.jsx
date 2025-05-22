@@ -1,3 +1,6 @@
+import { useParams } from "react-router-dom";
+
 export default function AlbomPage() {
-  return <div>AlbomPage</div>;
+  const { id } = useParams();
+  return <div>Album #{id}</div>;
 }
