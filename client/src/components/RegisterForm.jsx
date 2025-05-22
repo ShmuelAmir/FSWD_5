@@ -1,43 +1,39 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useQuery } from "../hooks/useQuery";
-import { useAuth } from "../hooks/useAuth";
-import { fetchUsers } from "../api/users";
 
-export default function Login() {
+export default function RegisterForm({
+  users,
+  username,
+  setUsername,
+  password,
+  setPassword,
+  handleSuccess,
+}) {
   const navigate = useNavigate();
-  const [, setUser] = useAuth();
 
-  // TODO: maybe change to useRef
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [verify, setVerify] = useState("");
   const [error, setError] = useState("");
-
-  const { data: users, error: usersError } = useQuery(fetchUsers);
-
-  if (usersError) {
-    return <ErrorMessage error={usersError} />;
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    const currentUesr = users.find((u) => u.username === username);
-
-    if (!currentUesr) {
-      setError("User not found");
-    } else if (currentUesr.website !== password) {
-      setError("Wrong Password. Try again.");
-    } else {
-      setUser(currentUesr.id);
-      navigate("/home");
+    if (password !== verify) {
+      setError("Passwords do not match.");
+      return;
     }
+
+    if (users.find((u) => u.username === username)) {
+      setError("Username already exists.");
+      return;
+    }
+
+    handleSuccess();
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit} autoComplete="on">
         <input
           name="username"
@@ -55,19 +51,29 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password"
+          autoComplete="new-password"
         />
         <br />
-        <button type="submit">Sign in</button>
+        <input
+          name="verify"
+          placeholder="Confirm password"
+          type="password"
+          value={verify}
+          onChange={(e) => setVerify(e.target.value)}
+          required
+          autoComplete="new-password"
+        />
+        <br />
+        <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <p>
-        Don't have an account?{" "}
+        Already have an account?{" "}
         <span
           style={{ color: "blue", cursor: "pointer" }}
-          onClick={() => navigate("/register")}
+          onClick={() => navigate("/login")}
         >
-          Register here
+          Login
         </span>
       </p>
     </div>

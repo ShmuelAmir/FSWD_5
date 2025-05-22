@@ -1,12 +1,13 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-export function fetchUser(id) {
-  try {
-    return axios.get(`${import.meta.env.BASE_URL}/users/${id}`);
-  } catch (error) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
+export function fetchUsers() {
+  return axiosInstance.get("users");
 }
 
-export function login() {}
-export function register() {}
+export function fetchUser(id) {
+  return axiosInstance.get(`users/${id}`);
+}
+
+export async function createUser(user) {
+  return axiosInstance.post("users", user);
+}

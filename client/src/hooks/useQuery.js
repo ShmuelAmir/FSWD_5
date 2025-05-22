@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 export function useQuery(fetcher) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [status, setStatus] = useState("idle");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let ignore = false;
-    setStatus("loading");
+    setIsLoading(true);
 
     const fetchData = async () => {
       try {
@@ -16,10 +16,9 @@ export function useQuery(fetcher) {
           setData(response.data);
         }
       } catch (error) {
-        setStatus("error");
         setError(error.response?.data?.message || error.message);
       } finally {
-        setStatus("success");
+        setIsLoading(false);
       }
     };
 
@@ -30,5 +29,5 @@ export function useQuery(fetcher) {
     };
   }, [fetcher]);
 
-  return { data, error, status };
+  return { data, isLoading, error };
 }

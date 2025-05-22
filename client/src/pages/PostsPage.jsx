@@ -7,7 +7,7 @@ import PostsList from "../components/PostList";
 import Button from "../components/ui/Button";
 import SearchBar from "../components/SearchBar";
 import Loader from "../components/ui/Loader";
-import ErrorMessage from "../components/ui/Error";
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function PostsPage() {
   const [searchValue, setSearchValue] = useState("");
