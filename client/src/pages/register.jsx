@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const EXISTING_USERS = [
-  { username: "hanna" },
-  { username: "george" },
+// Default users (hardcoded, like "server" users)
+const USERS = [
+  { username: "hanna", website: "test123", fullname: "Hanna Levi" },
+  { username: "george", website: "azerty", fullname: "George Smith" }
 ];
 
 export default function Register() {
@@ -16,32 +17,74 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
-    if (EXISTING_USERS.find(u => u.username === username)) {
-      setError("Nom d'utilisateur déjà pris.");
-      return;
-    }
+
+    // Check if passwords match
     if (password !== verify) {
-      setError("Les mots de passe ne correspondent pas.");
+      setError("Passwords do not match.");
       return;
     }
-    if (!username || !password) {
-      setError("Tous les champs sont obligatoires.");
+
+    // Check if username already exists in USERS (hardcoded)
+    if (USERS.find(u => u.username === username)) {
+      setError("Username already exists.");
       return;
     }
-    localStorage.setItem("registerUser", JSON.stringify({ username, password }));
+
+    // Check if username already exists in localStorage users
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    if (users.find(u => u.username === username)) {
+      setError("Username already exists.");
+      return;
+    }
+
+    // If all OK, save user temporarily for details step
+    const tempUser = { username, password };
+    localStorage.setItem("registerUser", JSON.stringify(tempUser));
     navigate("/register/details");
   };
 
   return (
     <div>
-      <h2>Inscription</h2>
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Username" value={username} onChange={e=>setUsername(e.target.value)} required /><br />
-        <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} required /><br />
-        <input placeholder="Password (verify)" type="password" value={verify} onChange={e=>setVerify(e.target.value)} required /><br />
-        <button type="submit">Suivant</button>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit} autoComplete="on">
+        <input
+          name="username"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+          autoComplete="username"
+        /><br />
+        <input
+          name="password"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+        /><br />
+        <input
+          name="verify"
+          placeholder="Confirm password"
+          type="password"
+          value={verify}
+          onChange={e => setVerify(e.target.value)}
+          required
+          autoComplete="new-password"
+        /><br />
+        <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
+      <p>
+        Already have an account?{" "}
+        <span
+          style={{ color: "blue", cursor: "pointer" }}
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </span>
+      </p>
     </div>
   );
 }

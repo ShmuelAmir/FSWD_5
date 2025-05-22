@@ -4,28 +4,36 @@ import { useNavigate } from "react-router-dom";
 export default function RegisterDetails() {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Récupère l'utilisateur temporaire stocké par register.jsx
+    setError("");
+
+    // Retrieve the temporary user from register step
     const tempUser = JSON.parse(localStorage.getItem("registerUser") || "{}");
+    if (!tempUser.username || !tempUser.password) {
+      setError("Missing registration step.");
+      navigate("/register");
+      return;
+    }
     const newUser = { ...tempUser, fullname, email };
 
-    // Récupère tous les users déjà créés
+    // Retrieve all existing users
     const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    // Vérifie unicité du username
-    if (users.some(u => u.username === newUser.username)) {
-      alert("Ce nom d'utilisateur existe déjà.");
+    // Double-check username uniqueness (safety)
+    if (users.find(u => u.username === newUser.username)) {
+      setError("This username is already registered.");
       return;
     }
 
-    // Ajoute le nouvel utilisateur
+    // Add the new user to the array and save
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
 
-    // Connecte le nouvel utilisateur
+    // Log in the new user and clean temp
     localStorage.setItem("user", JSON.stringify(newUser));
     localStorage.removeItem("registerUser");
     navigate("/home");
@@ -33,11 +41,11 @@ export default function RegisterDetails() {
 
   return (
     <div>
-      <h2>Complète ton profil</h2>
+      <h2>Complete your profile</h2>
       <form onSubmit={handleSubmit} autoComplete="on">
         <input
           name="fullname"
-          placeholder="Nom complet"
+          placeholder="Full name"
           value={fullname}
           onChange={e => setFullname(e.target.value)}
           required
@@ -52,8 +60,9 @@ export default function RegisterDetails() {
           required
           autoComplete="email"
         /><br />
-        <button type="submit">Créer mon compte</button>
+        <button type="submit">Create my account</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
