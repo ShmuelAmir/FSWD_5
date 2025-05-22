@@ -1,10 +1,8 @@
-import React from "react";
-
 export default function Home() {
   return (
     <div>
-      <h2>Bienvenue sur la page d'accueil!</h2>
-      <p>Tu es connecté(e). 🎉</p>
+      <h2>Welcome to the Homepage!</h2>
+      <p>You are connected. 🎉</p>
     </div>
   );
 }

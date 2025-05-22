@@ -1,15 +1,12 @@
-import { Outlet, Link } from "react-router-dom";
-
+import { Outlet, Link, Navigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router";
 
 export default function Layout() {
-  const navigate = useNavigate();
   const [user] = useAuth();
 
-  if (!user) {
-    navigate("/login");
-  }
+  // if (!user) {
+  //   return <Navigate to="/login" />;
+  // }
 
   return (
     <div>
