@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const USERS = [
-  { username: "hanna", website: "test123", fullname: "Hanna Levi" },
-  { username: "george", website: "azerty", fullname: "George Smith" }
-];
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState(""); // Mot de passe
   const [error, setError] = useState("");
@@ -16,22 +14,12 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    // Récupère tous les users créés
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    // 1. Cherche dans USERS codés en dur
-    const userOk =
-      USERS.find(
-        (u) => u.username === username && u.website === password
-      )
-      // 2. OU dans users du localStorage (mot de passe = password)
-      || users.find(
-        (u) => u.username === username && u.password === password
-      );
-
-    if (!userOk) {
-      setError("Nom d'utilisateur ou mot de passe invalide.");
-      return;
+    if (username === "admin" && password === "admin") {
+      alert("Login successful!");
+      navigate("/");
+    } else {
+      setError("Invalid credentials");
     }
 
     // Stocke l'utilisateur connecté
@@ -41,26 +29,32 @@ export default function Login() {
 
   return (
     <div>
-      <h2>Connexion</h2>
-      <form onSubmit={handleSubmit} autoComplete="on">
-        <input
-          name="username"
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-          autoComplete="username"
-        /><br />
-        <input
-          name="password"
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-        /><br />
-        <button type="submit">Se connecter</button>
+
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>
+            Username:
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Password:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <button type="submit">Login</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <p>

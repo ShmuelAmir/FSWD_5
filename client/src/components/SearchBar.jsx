@@ -4,7 +4,7 @@ export default function SearchBar({ searchValue, setSearchValue }) {
       <input
         type="search"
         value={searchValue}
-        onChange={setSearchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Search..."
       />
     </div>
