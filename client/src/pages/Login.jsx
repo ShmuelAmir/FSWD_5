@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+
 import { useQuery } from "../hooks/useQuery";
 import { useAuth } from "../hooks/useAuth";
-import { fetchUsers } from "../api/users";
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [, setUser] = useAuth();
+  const [, setUserId] = useAuth();
 
   // TODO: maybe change to useRef
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { data: users, error: usersError } = useQuery(fetchUsers);
+  const { data: users, error: usersError } = useQuery("users");
 
   if (usersError) {
     return <ErrorMessage error={usersError} />;
@@ -30,7 +31,7 @@ export default function Login() {
     } else if (currentUesr.website !== password) {
       setError("Wrong Password. Try again.");
     } else {
-      setUser(currentUesr.id);
+      setUserId(currentUesr.id);
       navigate("/home");
     }
   };

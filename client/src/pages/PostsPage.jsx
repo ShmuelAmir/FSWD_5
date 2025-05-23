@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
-import { fetchPosts } from "../api/posts";
+import { getPostsUrl } from "../api/posts";
 import { useQuery } from "../hooks/useQuery";
 import { useDebounce } from "../hooks/useDebounce";
 import PostsList from "../components/PostList";
@@ -13,11 +13,7 @@ export default function PostsPage() {
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue);
 
-  const fetchFunction = useCallback(
-    () => fetchPosts(debouncedValue),
-    [debouncedValue]
-  );
-  const { data, error, status } = useQuery(fetchFunction);
+  const { data, error, status } = useQuery(getPostsUrl(debouncedValue));
 
   // TODO: move down to prevent flickring
   if (status === "loading") {

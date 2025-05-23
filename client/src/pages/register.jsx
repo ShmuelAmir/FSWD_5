@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { useQuery } from "../hooks/useQuery";
-import { fetchUsers } from "../api/users";
 import RegisterDetails from "../components/RegisterDetails";
 import RegisterForm from "../components/RegisterForm";
 
@@ -10,7 +9,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [details, setDetails] = useState(false);
 
-  const { data: users, error: usersError } = useQuery(fetchUsers);
+  const { data: users, error: usersError } = useQuery("users");
 
   if (usersError) {
     return <ErrorMessage error={usersError} />;
