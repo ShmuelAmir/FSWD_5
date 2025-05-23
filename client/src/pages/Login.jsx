@@ -7,7 +7,7 @@ import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [, setUserId] = useAuth();
+  const { setUserId } = useAuth();
 
   // TODO: maybe change to useRef
   const [username, setUsername] = useState("");

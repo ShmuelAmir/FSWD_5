@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 
 import { useAuth } from "../hooks/useAuth";
-import { useQuery } from "../hooks/useQuery";
 import Button from "../components/ui/Button";
 import UserInfo from "../components/UserInfo";
 import Loader from "../components/ui/Loader";
@@ -10,10 +9,10 @@ import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useAuth();
   const [show, setShow] = useState(false);
 
-  const { data: user, isLoading, error } = useQuery(`users/${userId}`, !userId);
+  const { setUserId, userQuery } = useAuth();
+  const { data: user, isLoading, error } = userQuery;
 
   if (isLoading || !user) {
     return <Loader />;

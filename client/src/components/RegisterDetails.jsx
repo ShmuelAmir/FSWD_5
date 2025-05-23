@@ -6,7 +6,7 @@ import { createUser } from "../api/users";
 
 export default function RegisterDetails({ username, password }) {
   const navigate = useNavigate();
-  const [, setUserId] = useAuth();
+  const { setUserId } = useAuth();
 
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");

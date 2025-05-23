@@ -3,7 +3,7 @@ import { Outlet, Navigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Layout() {
-  const [userId] = useAuth();
+  const { userId } = useAuth();
 
   if (!userId) {
     return <Navigate to="/login" />;
