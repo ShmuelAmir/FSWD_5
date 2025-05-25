@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useQuery } from "../hooks/useQuery";
 import { fetchUsers } from "../api/users";
-import RegisterDetails from "../components/RegisterDetails";
+import RegisterDetails from "./RegisterDetails";
 import RegisterForm from "../components/RegisterForm";
 
 export default function Register() {

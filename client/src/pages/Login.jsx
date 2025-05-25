@@ -1,73 +1,69 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useQuery } from "../hooks/useQuery";
-import { useAuth } from "../hooks/useAuth";
-import { fetchUsers } from "../api/users";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [, setUser] = useAuth();
-
-  // TODO: maybe change to useRef
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const { data: users, error: usersError } = useQuery(fetchUsers);
+  // Simule un "fetch" users depuis un backend
+  // Remplace cette partie par un vrai fetch si besoin !
+  const [users, setUsers] = useState([]);
 
-  if (usersError) {
-    return <ErrorMessage error={usersError} />;
-  }
+  React.useEffect(() => {
+    // Exemple avec json-server sur port 3001
+    fetch("http://localhost:3001/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch(() => setUsers([]));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    const currentUesr = users.find((u) => u.username === username);
+    const userOk = users.find(
+      (u) => u.username === username && u.website === password
+    );
 
-    if (!currentUesr) {
-      setError("User not found");
-    } else if (currentUesr.website !== password) {
-      setError("Wrong Password. Try again.");
-    } else {
-      setUser(currentUesr.id);
-      navigate("/home");
+    if (!userOk) {
+      setError("Nom d'utilisateur ou mot de passe invalide.");
+      return;
     }
+
+    // Stocke l'ID (ou tout l'user) dans localStorage
+    localStorage.setItem("user", JSON.stringify(userOk));
+    navigate("/home");
   };
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} autoComplete="on">
+      <h2>Connexion</h2>
+      <form onSubmit={handleSubmit}>
         <input
-          name="username"
-          placeholder="Username"
+          placeholder="Nom d'utilisateur"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="username"
-        />
-        <br />
+        /><br />
         <input
-          name="password"
-          placeholder="Password"
           type="password"
+          placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password"
-        />
-        <br />
-        <button type="submit">Sign in</button>
+        /><br />
+        <button type="submit">Se connecter</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <p>
-        Don't have an account?{" "}
+        Pas de compte ?{" "}
         <span
           style={{ color: "blue", cursor: "pointer" }}
           onClick={() => navigate("/register")}
         >
-          Register here
+          Inscris-toi
         </span>
       </p>
     </div>
