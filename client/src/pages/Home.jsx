@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
 
 import { useAuth } from "../hooks/useAuth";
 import Button from "../components/ui/Button";
@@ -8,10 +7,8 @@ import Loader from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Home() {
-  const navigate = useNavigate();
   const [show, setShow] = useState(false);
-
-  const { setUserId, userQuery } = useAuth();
+  const { userQuery } = useAuth();
   const { data: user, isLoading, error } = userQuery;
 
   if (isLoading || !user) {
@@ -26,39 +23,15 @@ export default function Home() {
     setShow((p) => !p);
   };
 
-  const handleLogout = () => {
-    setUserId(undefined);
-    navigate("/login");
-  };
-
   return (
-    <div>
-      <header>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/home">Home</Link>
-            </li>
-            <li>
-              <Link to="/todos">Todos</Link>
-            </li>
-            <li>
-              <Link to="/posts">Posts</Link>
-            </li>
-            <li>
-              <Link to="/Albums">Albums</Link>
-            </li>
-          </ul>
-        </nav>
-        {/* TODO: add user avatar with info link and logout button */}
-        <div>User avatar</div>
-        <Button text="Logout" handleClick={handleLogout} />
-        <Button text="Show User Info" handleClick={handleToggleShow} />
-      </header>
-      <main>
-        <h2>Welcome, {user.name || user.username}!</h2>
-        {show && <UserInfo user={user} />}
-      </main>
+    <div className="container">
+      <h2 className="welcome-title">Welcome, {user.name || user.username}!</h2>
+      <Button
+        text="Show User Info"
+        handleClick={handleToggleShow}
+        className="btn-primary"
+      />
+      {show && <UserInfo user={user} />}
     </div>
   );
 }

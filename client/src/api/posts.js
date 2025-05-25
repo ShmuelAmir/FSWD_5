@@ -16,7 +16,7 @@ export function getPostUrl(id) {
 }
 
 export function getPostCommentsUrl(postId) {
-  return `${POSTS_URL}/${postId}/${COMMENTS_URL}`;
+  return `${POSTS_URL}/${postId}/${COMMENTS_URL}?_expand=user`;
 }
 
 export function createPost(post) {

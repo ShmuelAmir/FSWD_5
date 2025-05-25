@@ -7,7 +7,6 @@ import { useAuth } from "../hooks/useAuth";
 import PostsList from "../components/PostList";
 import Button from "../components/ui/Button";
 import SearchBar from "../components/SearchBar";
-import Loader from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import PostForm from "../components/PostForm";
 
@@ -22,11 +21,6 @@ export default function PostsPage() {
     !userId
   );
 
-  // TODO: move down to prevent flickring
-  if (isLoading) {
-    return <Loader />;
-  }
-
   if (error) {
     return <ErrorMessage />;
   }
@@ -37,14 +31,27 @@ export default function PostsPage() {
   };
 
   return (
-    <div>
-      <h2>Posts</h2>
-      <div>
-        <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
-        <Button text="Add Post" handleClick={() => setAdd(true)} />
+    <div className="page-container">
+      <div className="container">
+        <div className="page-header">
+          <h2 className="page-title">Posts</h2>
+          <div className="page-actions">
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+            />
+            <Button
+              text="Toggle post form"
+              handleClick={() => setAdd((p) => !p)}
+              className={add ? "btn-secondary" : "btn-primary"}
+            />
+          </div>
+        </div>
+
+        {add && <PostForm onSubmit={handleSubmit} />}
+
+        {!isLoading && <PostsList posts={data} />}
       </div>
-      {add && <PostForm onSubmit={handleSubmit} />}
-      <PostsList posts={data} />
     </div>
   );
 }

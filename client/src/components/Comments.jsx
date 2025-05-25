@@ -5,7 +5,9 @@ import ErrorMessage from "../components/ui/ErrorMessage";
 import Comment from "./Comment";
 
 export default function Comments({ postId }) {
-  const { data, error, isLoading } = useQuery(getPostCommentsUrl(postId));
+  const { data, error, isLoading, refetch } = useQuery(
+    getPostCommentsUrl(postId)
+  );
 
   if (isLoading || !data) {
     return <Loader />;
@@ -16,9 +18,9 @@ export default function Comments({ postId }) {
   }
 
   return (
-    <div>
+    <div className="comments-content">
       {data.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
+        <Comment key={comment.id} comment={comment} refetch={refetch} />
       ))}
     </div>
   );

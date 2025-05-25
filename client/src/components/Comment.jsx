@@ -4,7 +4,7 @@ import { deleteComment, updateComment } from "../api/comments";
 import { useAuth } from "../hooks/useAuth";
 import Button from "./ui/Button";
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, refetch }) {
   const { userId } = useAuth();
 
   const [edit, setEdit] = useState(false);
@@ -16,31 +16,51 @@ export default function Comment({ comment }) {
 
   const handleSave = () => {
     updateComment(comment.id, { body });
+    setEdit(false);
+    refetch();
   };
 
   const handleDelete = () => {
     deleteComment(comment.id);
+    refetch();
+  };
+
+  const handelCancel = () => {
+    setEdit(false);
+    setBody(comment.body);
   };
 
   return (
-    <div>
-      {/* name of the commenter by comment.userId */}
+    <div className="comment-card">
       {edit ? (
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
           required
+          className="comment-edit-input"
         ></textarea>
       ) : (
-        <p>{comment.body}</p>
+        <>
+          <p className="comment-body">{comment.body}</p>
+          <p className="comment-user">
+            {comment.user.name} {comment.user.username}
+          </p>
+        </>
       )}
       {userId === comment.userId && (
-        <div>
+        <div className="comment-actions">
           <Button
-            text={edit ? "save" : "edit"}
+            text={edit ? "💾" : "✏️"}
             handleClick={edit ? handleSave : handleEdit}
+            className="btn-icon"
+            title={edit ? "Save" : "Edit"}
           />
-          <Button text="delete" handleClick={handleDelete} />
+          <Button
+            text={edit ? "❌" : "🗑️"}
+            handleClick={edit ? handelCancel : handleDelete}
+            className="btn-icon"
+            title={edit ? "Cancel" : "Delete"}
+          />
         </div>
       )}
     </div>

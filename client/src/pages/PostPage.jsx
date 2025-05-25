@@ -15,7 +15,7 @@ import { createComment } from "../api/comments";
 export default function PostPage() {
   const { userId } = useAuth();
   const { id } = useParams();
-  const { data, isLoading, error } = useQuery(getPostUrl(id), !id);
+  const { data, isLoading, error, refetch } = useQuery(getPostUrl(id), !id);
 
   const [show, setShow] = useState(true);
 
@@ -36,15 +36,30 @@ export default function PostPage() {
   };
 
   return (
-    <div>
-      <Post post={data} />
-      <Button text="Toggle comments" handleClick={toggleShow} />
-      {show && (
-        <div>
-          <Comments postId={id} />
-          <AddComment handleAdd={addComment} />
+    <div className="page-container">
+      <div className="container">
+        <div className="post-page-layout">
+          <div className="post-section">
+            <Post post={data} refetch={refetch} />
+          </div>
+          <div className="comments-section">
+            <div className="comments-header">
+              <h3>Comments</h3>
+              <Button
+                text={show ? "Hide comments" : "Show comments"}
+                handleClick={toggleShow}
+                className="btn-secondary"
+              />
+            </div>
+            {show && (
+              <div>
+                <Comments postId={id} />
+                <AddComment handleAdd={addComment} />
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

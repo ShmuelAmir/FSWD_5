@@ -17,9 +17,16 @@ export default function AddComment({ handleAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea name="comment" id="comment" onChange={handleChange}></textarea>
-      <Button text="Send" />
-    </form>
+    <>
+      <h3>Add Comment</h3>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          name="comment"
+          id="comment"
+          onChange={handleChange}
+        ></textarea>
+        <Button text="Send" className="btn-primary" />
+      </form>
+    </>
   );
 }
