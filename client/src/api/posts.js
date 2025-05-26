@@ -1,11 +1,11 @@
 import axiosInstance from "./axiosInstance";
 
-export function fetchPosts(searchValue) {
+export function getPostsUrl(searchValue) {
   let url = "posts";
   if (searchValue) {
     url += `?q=${searchValue}`;
   }
-  return axiosInstance.get(url);
+  return url;
 }
 
 export function fetchPost(id) {

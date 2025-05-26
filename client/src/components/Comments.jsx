@@ -1,11 +1,10 @@
-import { fetchComments } from "../api/comments";
 import { useQuery } from "../hooks/useQuery";
 import Loader from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import Comment from "./Comment";
 
 export default function Comments() {
-  const { data, error, isLoading } = useQuery(fetchComments);
+  const { data, error, isLoading } = useQuery("comments");
 
   if (isLoading) {
     return <Loader />;

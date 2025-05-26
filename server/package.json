@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "serve": "npx json-server@0.17.4 db.json -p 3001"
+    "serve": "npx json-server@0.17.4 db.json -p 3005"
   },
   "keywords": [],
   "author": "",

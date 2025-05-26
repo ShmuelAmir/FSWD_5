@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router";
+
+import { useAuth } from "../hooks/useAuth";
+import Button from "../components/ui/Button";
+import UserInfo from "../components/UserInfo";
+import Loader from "../components/ui/Loader";
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    // Cherche l'utilisateur dans localStorage
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-      navigate("/login");
-    } else {
-      setUser(JSON.parse(userData));
-    }
-  }, [navigate]);
+  const { setUserId, userQuery } = useAuth();
+  const { data: user, isLoading, error } = userQuery;
+
+  if (isLoading || !user) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
+
+  const handleToggleShow = () => {
+    setShow((p) => !p);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -24,17 +38,32 @@ export default function Home() {
 
   return (
     <div>
-      <h2>Bienvenue, {user.fullname || user.username || user.name}!</h2>
-      <nav style={{ display: "flex", gap: "1em", marginBottom: "1em" }}>
-        <Link to="/info">Info</Link>
-        <Link to="/todos">Todos</Link>
-        <Link to="/posts">Posts</Link>
-        <Link to="/albums">Albums</Link>
-        <button onClick={handleLogout} style={{ cursor: "pointer" }}>
-          Logout
-        </button>
-      </nav>
-      {/* Ici tu mets tes sous-pages */}
+      <header>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/home">Home</Link>
+            </li>
+            <li>
+              <Link to="/todos">Todos</Link>
+            </li>
+            <li>
+              <Link to="/posts">Posts</Link>
+            </li>
+            <li>
+              <Link to="/Albums">Albums</Link>
+            </li>
+          </ul>
+        </nav>
+        {/* TODO: add user avatar with info link and logout button */}
+        <div>User avatar</div>
+        <Button text="Logout" handleClick={handleLogout} />
+        <Button text="Show User Info" handleClick={handleToggleShow} />
+      </header>
+      <main>
+        <h2>Welcome, {user.name || user.username}!</h2>
+        {show && <UserInfo user={user} />}
+      </main>
     </div>
   );
 }

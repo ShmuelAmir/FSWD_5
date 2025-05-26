@@ -6,7 +6,7 @@ import { createUser } from "../api/users";
 
 export default function RegisterDetails({ username, password }) {
   const navigate = useNavigate();
-  const [, setUser] = useAuth();
+  const { setUserId } = useAuth();
 
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -23,7 +23,7 @@ export default function RegisterDetails({ username, password }) {
       phone,
     });
 
-    setUser(userId);
+    setUserId(userId);
     navigate("/home");
   };
 

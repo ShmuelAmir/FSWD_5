@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import axiosInstance from "../api/axiosInstance";
 
-export function useQuery(fetcher) {
+export function useQuery(url, disabled) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,8 @@ export function useQuery(fetcher) {
 
     const fetchData = async () => {
       try {
-        const response = await fetcher();
+        if (disabled) return;
+        const response = await axiosInstance.get(url);
         if (!ignore) {
           setData(response.data);
         }
@@ -27,7 +29,7 @@ export function useQuery(fetcher) {
     return () => {
       ignore = true;
     };
-  }, [fetcher]);
+  }, [url, disabled]);
 
   return { data, isLoading, error };
 }
