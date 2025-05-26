@@ -19,7 +19,7 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <div className="auth-container">
       {details ? (
         <RegisterDetails username={username} password={password} />
       ) : (

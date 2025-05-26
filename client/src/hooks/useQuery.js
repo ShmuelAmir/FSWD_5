@@ -5,6 +5,7 @@ export function useQuery(url, disabled) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [refetchFlag, setRefetchFlag] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -29,7 +30,11 @@ export function useQuery(url, disabled) {
     return () => {
       ignore = true;
     };
-  }, [url, disabled]);
+  }, [url, disabled, refetchFlag]);
 
-  return { data, isLoading, error };
+  const refetch = () => {
+    setRefetchFlag((p) => !p);
+  };
+
+  return { data, isLoading, error, refetch };
 }

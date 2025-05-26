@@ -1,6 +1,6 @@
-export default function Button({ text, handleClick }) {
+export default function Button({ text, handleClick, ...props }) {
   return (
-    <button style={{ cursor: "pointer" }} onClick={handleClick}>
+    <button onClick={handleClick} {...props}>
       {text}
     </button>
   );

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 
 import Layout from "./components/Layout.jsx";
 import Login from "./pages/Login.jsx";
@@ -17,6 +17,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
+      { index: true, element: <Navigate to="/home" replace /> },
       { path: "home", element: <Home /> },
       { path: "info", element: <UserInfo /> },
       { path: "todos", element: <TodosPage /> },

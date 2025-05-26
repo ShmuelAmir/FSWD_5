@@ -28,18 +28,16 @@ export default function RegisterDetails({ username, password }) {
   };
 
   return (
-    <div>
+    <div className="auth-card">
       <h2>Complete your profile</h2>
-      <form onSubmit={handleSubmit} autoComplete="on">
+      <form onSubmit={handleSubmit}>
         <input
           name="fullname"
           placeholder="Full name"
           value={fullname}
           onChange={(e) => setFullname(e.target.value)}
           required
-          autoComplete="name"
         />
-        <br />
         <input
           name="email"
           placeholder="Email"
@@ -47,18 +45,14 @@ export default function RegisterDetails({ username, password }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          autoComplete="email"
         />
-        <br />
         <input
           name="phone"
           placeholder="Phone"
           type="phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          autoComplete="phone"
         />
-        <br />
         <button type="submit">Create my account</button>
       </form>
     </div>

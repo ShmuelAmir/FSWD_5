@@ -32,18 +32,16 @@ export default function RegisterForm({
   };
 
   return (
-    <div>
+    <div className="auth-card">
       <h2>Register</h2>
-      <form onSubmit={handleSubmit} autoComplete="on">
+      <form onSubmit={handleSubmit}>
         <input
           name="username"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="username"
         />
-        <br />
         <input
           name="password"
           placeholder="Password"
@@ -51,9 +49,7 @@ export default function RegisterForm({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="new-password"
         />
-        <br />
         <input
           name="verify"
           placeholder="Confirm password"
@@ -61,9 +57,7 @@ export default function RegisterForm({
           value={verify}
           onChange={(e) => setVerify(e.target.value)}
           required
-          autoComplete="new-password"
         />
-        <br />
         <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}

@@ -1,38 +1,57 @@
 import { useState } from "react";
 
-import { getPostsUrl } from "../api/posts";
+import { createPost, getPostsUrl } from "../api/posts";
 import { useQuery } from "../hooks/useQuery";
 import { useDebounce } from "../hooks/useDebounce";
+import { useAuth } from "../hooks/useAuth";
 import PostsList from "../components/PostList";
 import Button from "../components/ui/Button";
 import SearchBar from "../components/SearchBar";
-import Loader from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
+import PostForm from "../components/PostForm";
 
 export default function PostsPage() {
   const [searchValue, setSearchValue] = useState("");
+  const [add, setAdd] = useState(false);
+
+  const { userId } = useAuth();
   const debouncedValue = useDebounce(searchValue);
-
-  const { data, error, status } = useQuery(getPostsUrl(debouncedValue));
-
-  // TODO: move down to prevent flickring
-  if (status === "loading") {
-    return <Loader />;
-  }
+  const { data, error, isLoading } = useQuery(
+    getPostsUrl(userId, debouncedValue),
+    !userId
+  );
 
   if (error) {
     return <ErrorMessage />;
   }
 
+  const handleSubmit = (title, body) => {
+    createPost({ userId, title, body });
+    setAdd(false);
+  };
+
   return (
-    <div>
-      <h2>Posts</h2>
-      <div>
-        <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
-        {/* navigate to create post page */}
-        <Button text="Add Post" />
+    <div className="page-container">
+      <div className="container">
+        <div className="page-header">
+          <h2 className="page-title">Posts</h2>
+          <div className="page-actions">
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+            />
+            <Button
+              text="Toggle post form"
+              handleClick={() => setAdd((p) => !p)}
+              className={add ? "btn-secondary" : "btn-primary"}
+            />
+          </div>
+        </div>
+
+        {add && <PostForm onSubmit={handleSubmit} />}
+
+        {!isLoading && <PostsList posts={data} />}
       </div>
-      <PostsList posts={data} />
     </div>
   );
 }

@@ -1,12 +1,15 @@
+import { getPostCommentsUrl } from "../api/posts";
 import { useQuery } from "../hooks/useQuery";
 import Loader from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import Comment from "./Comment";
 
-export default function Comments() {
-  const { data, error, isLoading } = useQuery("comments");
+export default function Comments({ postId }) {
+  const { data, error, isLoading, refetch } = useQuery(
+    getPostCommentsUrl(postId)
+  );
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <Loader />;
   }
 
@@ -15,9 +18,9 @@ export default function Comments() {
   }
 
   return (
-    <div>
+    <div className="comments-content">
       {data.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
+        <Comment key={comment.id} comment={comment} refetch={refetch} />
       ))}
     </div>
   );
