@@ -11,9 +11,9 @@ export function createComment(newComment) {
 }
 
 export function updateComment(id, updatedComment) {
-  axiosInstance.patch(getCommentUrl(id), updatedComment);
+  return axiosInstance.patch(getCommentUrl(id), updatedComment);
 }
 
 export function deleteComment(id) {
-  axiosInstance.delete(getCommentUrl(id));
+  return axiosInstance.delete(getCommentUrl(id));
 }

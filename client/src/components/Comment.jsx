@@ -14,14 +14,14 @@ export default function Comment({ comment, refetch }) {
     setEdit(true);
   };
 
-  const handleSave = () => {
-    updateComment(comment.id, { body });
+  const handleSave = async () => {
+    await updateComment(comment.id, { body });
     setEdit(false);
     refetch();
   };
 
-  const handleDelete = () => {
-    deleteComment(comment.id);
+  const handleDelete = async () => {
+    await deleteComment(comment.id);
     refetch();
   };
 

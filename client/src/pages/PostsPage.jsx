@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import { createPost, getPostsUrl } from "../api/posts";
+import { createPost, getPostsUrl, POSTS_URL } from "../api/posts";
 import { useQuery } from "../hooks/useQuery";
 import { useDebounce } from "../hooks/useDebounce";
 import { useAuth } from "../hooks/useAuth";
-import PostsList from "../components/PostList";
+import List from "../components/List";
 import Button from "../components/ui/Button";
 import SearchBar from "../components/SearchBar";
 import ErrorMessage from "../components/ui/ErrorMessage";
@@ -16,7 +16,7 @@ export default function PostsPage() {
 
   const { userId } = useAuth();
   const debouncedValue = useDebounce(searchValue);
-  const { data, error, isLoading } = useQuery(
+  const { data, error, isLoading, refetch } = useQuery(
     getPostsUrl(userId, debouncedValue),
     !userId
   );
@@ -25,9 +25,10 @@ export default function PostsPage() {
     return <ErrorMessage />;
   }
 
-  const handleSubmit = (title, body) => {
-    createPost({ userId, title, body });
+  const handleSubmit = async (title, body) => {
+    await createPost({ userId, title, body });
     setAdd(false);
+    refetch();
   };
 
   return (
@@ -50,7 +51,7 @@ export default function PostsPage() {
 
         {add && <PostForm onSubmit={handleSubmit} />}
 
-        {!isLoading && <PostsList posts={data} />}
+        {!isLoading && <List items={data} baseUrl={POSTS_URL} />}
       </div>
     </div>
   );

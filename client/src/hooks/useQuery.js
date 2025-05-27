@@ -16,7 +16,15 @@ export function useQuery(url, disabled) {
         if (disabled) return;
         const response = await axiosInstance.get(url);
         if (!ignore) {
-          setData(response.data);
+          const total = response.headers["x-total-count"];
+          if (total) {
+            setData({
+              items: response.data,
+              total: parseInt(total, 10),
+            });
+          } else {
+            setData(response.data);
+          }
         }
       } catch (error) {
         setError(error.response?.data?.message || error.message);

@@ -13,13 +13,13 @@ export default function Post({ post, refetch }) {
     setEdit(true);
   };
 
-  const handleSave = (title, body) => {
-    updatePost(post.id, { title, body });
+  const handleSave = async (title, body) => {
+    await updatePost(post.id, { title, body });
     refetch();
   };
 
-  const handleDelete = () => {
-    deletePost(post.id);
+  const handleDelete = async () => {
+    await deletePost(post.id);
     navigate("/posts");
   };
 
@@ -28,8 +28,8 @@ export default function Post({ post, refetch }) {
   };
 
   return (
-    <div className="post-card">
-      <div className="post-id">#{post.id}</div>
+    <div className="item-card">
+      <div className="item-id">#{post.id}</div>
       {edit ? (
         <PostForm
           onSubmit={handleSave}
@@ -37,7 +37,7 @@ export default function Post({ post, refetch }) {
         />
       ) : (
         <>
-          <h3 className="post-title">{post.title}</h3>
+          <h3 className="item-title">{post.title}</h3>
           <p className="post-body">{post.body}</p>
         </>
       )}

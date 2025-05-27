@@ -2535,6 +2535,11 @@
       "userId": 10,
       "id": 100,
       "title": "enim repellat iste"
+    },
+    {
+      "userId": 1,
+      "title": "New Album",
+      "id": 101
     }
   ],
   "comments": [
@@ -6547,6 +6552,27 @@
       "thumbnailUrl": "https://picsum.photos/id/2/150/150"
     },
     {
+      "albumId": 1,
+      "id": 201,
+      "title": "beautiful landscape",
+      "url": "https://picsum.photos/id/201/600/400",
+      "thumbnailUrl": "https://picsum.photos/id/201/150/150"
+    },
+    {
+      "albumId": 1,
+      "id": 202,
+      "title": "city at night",
+      "url": "https://picsum.photos/id/202/600/400",
+      "thumbnailUrl": "https://picsum.photos/id/202/150/150"
+    },
+    {
+      "albumId": 1,
+      "id": 203,
+      "title": "mountain view",
+      "url": "https://picsum.photos/id/203/600/400",
+      "thumbnailUrl": "https://picsum.photos/id/203/150/150"
+    },
+    {
       "albumId": 2,
       "id": 3,
       "title": "officia porro iure quia iusto qui ipsa ut modi",
@@ -6556,7 +6582,7 @@
     {
       "albumId": 2,
       "id": 4,
-      "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+      "title": "edit 2",
       "url": "https://picsum.photos/id/4/600/400",
       "thumbnailUrl": "https://picsum.photos/id/4/150/150"
     },

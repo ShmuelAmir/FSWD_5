@@ -14,7 +14,7 @@
 }
 
 .page-header {
-  padding-block-start: 1rem;
+  padding-block: 1rem;
 }
 
 .page-title {
@@ -151,14 +151,14 @@ nav .container {
 }
 
 /* Posts */
-.posts-container {
+.list-container {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   padding-block-start: 2rem;
 }
 
-.post-card {
+.item-card {
   flex: 1 1 300px;
   background: var(--card-background);
   border-radius: var(--radius-md);
@@ -167,12 +167,12 @@ nav .container {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.post-card:hover {
+.item-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.post-id {
+.item-id {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -186,20 +186,20 @@ nav .container {
   margin-bottom: 1rem;
 }
 
-.post-title {
+.item-title {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-color);
   margin-bottom: 0.75rem;
 }
 
-.post-body {
+.item-body {
   color: #64748b;
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
-.post-actions {
+.item-actions {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
@@ -287,13 +287,9 @@ nav .container {
     max-width: none;
   }
 
-  .post-card {
+  .item-card {
     max-width: 100%;
   }
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
 }
 
 .post,
@@ -423,7 +419,7 @@ form {
 }
 
 /* Post Page Layout */
-.post-page-layout {
+.page-layout {
   display: flex;
   gap: 3rem;
   margin: 2rem 0;
@@ -441,7 +437,7 @@ form {
   overflow-y: auto;
 }
 
-.post-section .post-card {
+.post-section .item-card {
   max-width: none;
   padding: 2rem;
 }
@@ -495,7 +491,7 @@ form {
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .post-page-layout {
+  .page-layout {
     flex-direction: column;
     gap: 2rem;
   }
@@ -582,4 +578,12 @@ form {
   font-size: 0.875rem;
   color: #64748b;
   margin-top: 0.5rem;
+}
+
+.icon-overlay {
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+}
+.photo-card:hover .icon-overlay {
+  opacity: 1;
 }

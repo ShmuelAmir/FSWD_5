@@ -79,7 +79,6 @@ textarea {
   background: var(--card-background);
   transition: border-color 0.2s ease;
   font-size: inherit;
-  min-width: 400px;
 }
 
 input:focus,

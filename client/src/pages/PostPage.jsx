@@ -19,7 +19,7 @@ export default function PostPage() {
 
   const [show, setShow] = useState(true);
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -38,9 +38,9 @@ export default function PostPage() {
   return (
     <div className="page-container">
       <div className="container">
-        <div className="post-page-layout">
+        <div className="page-layout">
           <div className="post-section">
-            <Post post={data} refetch={refetch} />
+            {data && <Post post={data} refetch={refetch} />}
           </div>
           <div className="comments-section">
             <div className="comments-header">

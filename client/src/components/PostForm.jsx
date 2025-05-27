@@ -6,7 +6,8 @@ export default function PostForm({ onSubmit, initialValues }) {
   const [title, setTitle] = useState(initialValues?.title || "");
   const [body, setBody] = useState(initialValues?.body || "");
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (title && body) {
       onSubmit(title, body);
     }
@@ -30,11 +31,13 @@ export default function PostForm({ onSubmit, initialValues }) {
           placeholder="Body"
           rows={10}
         ></textarea>
-        {/* <Button
-          text="Submit"
-          className="btn-primary"
-          style={{ alignSelf: "flex-end" }}
-        /> */}
+        {!initialValues && (
+          <Button
+            text="Submit"
+            className="btn-primary"
+            style={{ alignSelf: "flex-end" }}
+          />
+        )}
       </form>
     </div>
   );

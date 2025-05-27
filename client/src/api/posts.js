@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 import { COMMENTS_URL } from "./comments";
 
-const POSTS_URL = "posts";
+export const POSTS_URL = "posts";
 
 export function getPostsUrl(userId, searchValue) {
   let url = POSTS_URL + `?userId=${userId}`;
@@ -20,13 +20,13 @@ export function getPostCommentsUrl(postId) {
 }
 
 export function createPost(post) {
-  axiosInstance.post(POSTS_URL, post);
+  return axiosInstance.post(POSTS_URL, post);
 }
 
 export function updatePost(id, post) {
-  axiosInstance.patch(getPostUrl(id), post);
+  return axiosInstance.patch(getPostUrl(id), post);
 }
 
 export function deletePost(id) {
-  axiosInstance.delete(getPostUrl(id));
+  return axiosInstance.delete(getPostUrl(id));
 }

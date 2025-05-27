@@ -41,25 +41,21 @@ export default function Login() {
       <div className="auth-card">
         <h2 className="auth-title">Login</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <input
-              name="username"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              name="password"
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <input
+            name="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            name="password"
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           {error && <p className="error-message">{error}</p>}
           <button type="submit" className="auth-button">
             Sign in

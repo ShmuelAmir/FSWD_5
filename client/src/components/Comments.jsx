@@ -6,10 +6,11 @@ import Comment from "./Comment";
 
 export default function Comments({ postId }) {
   const { data, error, isLoading, refetch } = useQuery(
-    getPostCommentsUrl(postId)
+    getPostCommentsUrl(postId),
+    !postId
   );
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -19,7 +20,7 @@ export default function Comments({ postId }) {
 
   return (
     <div className="comments-content">
-      {data.map((comment) => (
+      {data?.map((comment) => (
         <Comment key={comment.id} comment={comment} refetch={refetch} />
       ))}
     </div>
