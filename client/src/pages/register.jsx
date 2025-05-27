@@ -14,10 +14,6 @@ export default function Register() {
     return <ErrorMessage error={usersError} />;
   }
 
-  const showDetailsScreen = () => {
-    setDetails(true);
-  };
-
   return (
     <div className="auth-container">
       {details ? (
@@ -29,7 +25,7 @@ export default function Register() {
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
-          onSuccess={showDetailsScreen}
+          onSuccess={() => setDetails(true)}
         />
       )}
     </div>

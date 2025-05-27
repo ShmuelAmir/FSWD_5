@@ -10,6 +10,10 @@ export function useLocalStorage(key, defaultValue = "") {
   });
 
   useEffect(() => {
+    if (value === undefined || value === null) {
+      localStorage.removeItem(key);
+      return;
+    }
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 

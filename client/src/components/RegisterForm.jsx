@@ -7,7 +7,7 @@ export default function RegisterForm({
   setUsername,
   password,
   setPassword,
-  handleSuccess,
+  onSuccess,
 }) {
   const navigate = useNavigate();
 
@@ -28,7 +28,9 @@ export default function RegisterForm({
       return;
     }
 
-    handleSuccess();
+    if (onSuccess) {
+      onSuccess();
+    }
   };
 
   return (

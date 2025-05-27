@@ -7,7 +7,7 @@ export function getCommentUrl(id) {
 }
 
 export function createComment(newComment) {
-  axiosInstance.create(COMMENTS_URL, newComment);
+  axiosInstance.post(COMMENTS_URL, newComment);
 }
 
 export function updateComment(id, updatedComment) {
