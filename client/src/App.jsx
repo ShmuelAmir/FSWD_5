@@ -5,5 +5,7 @@ import "./index.css";
 import "./App.css";
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router}/>
+  );
 }

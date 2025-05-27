@@ -1,122 +1,103 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import { useQuery, useQueryClient } from "../hooks/useQuery";
+import { fetchTodos, createTodo, updateTodo, deleteTodo } from "../api/todos";
+import Loader from "../components/ui/Loader";
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function TodosPage() {
-  const [todos, setTodos] = useState([]);
-  const [sort, setSort] = useState("id");
-  const [search, setSearch] = useState("");
-  const [searchField, setSearchField] = useState("id");
+  const [userId] = useAuth();
+  const queryClient = useQueryClient();
+
   const [newTitle, setNewTitle] = useState("");
-  const [user, setUser] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchField, setSearchField] = useState("title");
+  const [sortBy, setSortBy] = useState("id");
 
-  // Load user and todos from localStorage
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user") || "null");
-    setUser(userData);
-    if (userData) {
-      const allTodos = JSON.parse(localStorage.getItem("todos") || "{}");
-      setTodos(allTodos[userData.username] || []);
-    }
-  }, []);
-
-  // Helper: save todos for current user
-  const saveTodos = (newTodos) => {
-    const allTodos = JSON.parse(localStorage.getItem("todos") || "{}");
-    allTodos[user.username] = newTodos;
-    localStorage.setItem("todos", JSON.stringify(allTodos));
-    setTodos(newTodos);
-  };
-
-  // Add new todo
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
-    const id = Date.now();
-    const newTodo = { id, title: newTitle, done: false };
-    saveTodos([...todos, newTodo]);
-    setNewTitle("");
-  };
-
-  // Delete todo
-  const handleDelete = (id) => {
-    saveTodos(todos.filter((todo) => todo.id !== id));
-  };
-
-  // Toggle done
-  const handleToggle = (id) => {
-    saveTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      )
-    );
-  };
-
-  // Edit title
-  const handleEdit = (id, newTitle) => {
-    saveTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, title: newTitle } : todo
-      )
-    );
-  };
-
-  // Sort & filter
-  const filtered = todos.filter((todo) => {
-    if (!search) return true;
-    if (searchField === "id") return String(todo.id).includes(search);
-    if (searchField === "title")
-      return todo.title.toLowerCase().includes(search.toLowerCase());
-    if (searchField === "done")
-      return (todo.done ? "done" : "not done").includes(search.toLowerCase());
-    return true;
+  // 1) charger
+  const {
+    data: todos = [],
+    status,
+    error,
+  } = useQuery(() => fetchTodos(userId), ["todos", userId], {
+    enabled: !!userId,
   });
 
+  // 2) CRUD + invalidation cache
+  const addTodo = async (e) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+    await createTodo({ userId, title: newTitle, completed: false });
+    setNewTitle("");
+    queryClient.invalidateQueries(["todos", userId]);
+  };
+  const toggleTodo = async (todo) => {
+    await updateTodo(todo.id, { ...todo, completed: !todo.completed });
+    queryClient.invalidateQueries(["todos", userId]);
+  };
+  const deleteSingle = async (id) => {
+    await deleteTodo(id);
+    queryClient.invalidateQueries(["todos", userId]);
+  };
+  const editTitle = async (todo, text) => {
+    await updateTodo(todo.id, { ...todo, title: text });
+    queryClient.invalidateQueries(["todos", userId]);
+  };
+
+  // 3) recherche & tri en mémoire
+  const filtered = todos.filter((t) => {
+    if (!search) return true;
+    const v = search.toLowerCase();
+    if (searchField === "id") return String(t.id).includes(v);
+    if (searchField === "title") return t.title.toLowerCase().includes(v);
+    if (searchField === "status")
+      return (t.completed ? "done" : "not done").includes(v);
+    return true;
+  });
   const sorted = [...filtered].sort((a, b) => {
-    if (sort === "id") return a.id - b.id;
-    if (sort === "title") return a.title.localeCompare(b.title);
-    if (sort === "done") return a.done === b.done ? 0 : a.done ? 1 : -1;
+    if (sortBy === "id") return a.id - b.id;
+    if (sortBy === "title") return a.title.localeCompare(b.title);
+    if (sortBy === "status")
+      return a.completed === b.completed ? 0 : a.completed ? 1 : -1;
     return 0;
   });
 
-  if (!user) return <div>Please login.</div>;
+  if (status === "loading") return <Loader />;
+  if (error) return <ErrorMessage error={error} />;
 
   return (
     <div>
-      <h2>Todos for {user.name || user.username}</h2>
+      <h2>Todos de l’utilisateur</h2>
+      <Link to="/home">← Retour</Link>
 
-      <form onSubmit={handleAdd} style={{ marginBottom: 8 }}>
+      <form onSubmit={addTodo} style={{ margin: "1em 0" }}>
         <input
-          placeholder="Add new todo..."
+          placeholder="Nouvelle tâche…"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
-          required
         />
-        <button type="submit">Add</button>
+        <button type="submit">Ajouter</button>
       </form>
 
-      <div style={{ marginBottom: 8 }}>
+      <div style={{ display: "flex", gap: "1em", marginBottom: "1em" }}>
         <select
           value={searchField}
           onChange={(e) => setSearchField(e.target.value)}
         >
-          <option value="id">ID</option>
-          <option value="title">Title</option>
-          <option value="done">Status</option>
+          <option value="id">Recherche par ID</option>
+          <option value="title">Recherche par titre</option>
+          <option value="status">Recherche par statut</option>
         </select>
         <input
-          placeholder="Search..."
+          placeholder="Recherche…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ marginLeft: 6 }}
         />
-        <span style={{ marginLeft: 12 }}>Sort by:</span>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          style={{ marginLeft: 4 }}
-        >
-          <option value="id">ID</option>
-          <option value="title">Title</option>
-          <option value="done">Status</option>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="id">Trier par ID</option>
+          <option value="title">Trier par titre</option>
+          <option value="status">Trier par statut</option>
         </select>
       </div>
 
@@ -124,8 +105,8 @@ export default function TodosPage() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Status</th>
+            <th>Titre</th>
+            <th>Statut</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -134,61 +115,48 @@ export default function TodosPage() {
             <TodoRow
               key={todo.id}
               todo={todo}
-              onDelete={handleDelete}
-              onToggle={handleToggle}
-              onEdit={handleEdit}
+              onToggle={() => toggleTodo(todo)}
+              onDelete={() => deleteSingle(todo.id)}
+              onEdit={editTitle}
             />
           ))}
         </tbody>
       </table>
-      {sorted.length === 0 && <p>No todos found.</p>}
+      {sorted.length === 0 && <p>Aucune tâche trouvée.</p>}
     </div>
   );
 }
 
-// Composant pour chaque ligne Todo (éditable)
-function TodoRow({ todo, onDelete, onToggle, onEdit }) {
+function TodoRow({ todo, onToggle, onDelete, onEdit }) {
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(todo.title);
-
-  const saveEdit = () => {
-    onEdit(todo.id, title.trim() || todo.title);
+  const [draft, setDraft] = useState(todo.title);
+  const save = () => {
+    onEdit(todo, draft.trim() || todo.title);
     setEditing(false);
   };
-
   return (
     <tr>
       <td>{todo.id}</td>
       <td>
         {editing ? (
           <>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} />
-            <button onClick={saveEdit} style={{ marginLeft: 4 }}>
-              Save
-            </button>
-            <button onClick={() => setEditing(false)} style={{ marginLeft: 2 }}>
-              Cancel
-            </button>
+            <input value={draft} onChange={(e) => setDraft(e.target.value)} />
+            <button onClick={save}>✔︎</button>
+            <button onClick={() => setEditing(false)}>✕</button>
           </>
         ) : (
           <>
             {todo.title}
-            <button onClick={() => setEditing(true)} style={{ marginLeft: 6 }}>
-              Edit
-            </button>
+            <button onClick={() => setEditing(true)}>✎</button>
           </>
         )}
       </td>
       <td>
-        <input
-          type="checkbox"
-          checked={todo.done}
-          onChange={() => onToggle(todo.id)}
-        />
-        {todo.done ? " Done" : " Not done"}
+        <input type="checkbox" checked={todo.completed} onChange={onToggle} />
+        {todo.completed ? " Done" : " Not done"}
       </td>
       <td>
-        <button onClick={() => onDelete(todo.id)}>Delete</button>
+        <button onClick={onDelete}>🗑</button>
       </td>
     </tr>
   );

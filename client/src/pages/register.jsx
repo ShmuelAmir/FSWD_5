@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useQuery } from "../hooks/useQuery";
 import RegisterDetails from "../components/RegisterDetails";
 import RegisterForm from "../components/RegisterForm";
@@ -30,7 +29,7 @@ export default function Register() {
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
-          handleSuccess={showDetailsScreen}
+          onSuccess={showDetailsScreen}
         />
       )}
     </div>
